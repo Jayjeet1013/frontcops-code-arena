@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/auth/SupabaseProvider";
@@ -54,7 +53,7 @@ export default function Index() {
             </button>
             <a
               href="#"
-              onClick={() => nav("/signup")}
+              onClick={() => nav("/auth")}
               className="text-primary text-sm mt-3 block hover:underline text-center"
             >
               New? Create an Account
