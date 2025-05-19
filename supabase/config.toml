@@ -1,1 +1,5 @@
+
 project_id = "lhtblxdxqscuiggesnkp"
+
+[functions.ai-gemini]
+verify_jwt = true
