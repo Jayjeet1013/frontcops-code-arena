@@ -1,4 +1,3 @@
-
 import { Home, Book, PieChart, Code, FileText, User } from "lucide-react";
 import {
   Sidebar,
@@ -12,6 +11,7 @@ import {
   SidebarFooter
 } from "@/components/ui/sidebar";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const menuItems = [
   { to: "/dashboard", label: "Dashboard", icon: Home },
@@ -22,11 +22,21 @@ const menuItems = [
 ];
 
 export function AppSidebar() {
+  const nav = useNavigate();
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>FrontCops</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            <button
+              type="button"
+              className="text-primary hover:underline text-lg font-extrabold font-inter p-0 m-0 bg-transparent border-none outline-none cursor-pointer"
+              onClick={() => nav("/")}
+              title="Go to FrontCops landing"
+            >
+              FrontCops
+            </button>
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (

@@ -1,4 +1,3 @@
-
 import { useAuth } from "@/auth/SupabaseProvider";
 import { Button } from "@/components/ui/button";
 import { LogOut, Home } from "lucide-react";
@@ -41,3 +40,4 @@ export function DashboardNavbar() {
     </nav>
   );
 }
+
