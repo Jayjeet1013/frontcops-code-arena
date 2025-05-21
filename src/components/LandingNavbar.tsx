@@ -5,13 +5,10 @@ import { LogIn, LogOut, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export function LandingNavbar() {
-  const { user, supabase } = useAuth();
+  const { user } = useAuth();
   const nav = useNavigate();
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    nav("/");
-  };
+  const handleDashboard = () => nav("/dashboard");
 
   return (
     <nav className="w-full flex items-center justify-between px-6 py-4 bg-white shadow-soft border-b z-30">
@@ -21,6 +18,7 @@ export function LandingNavbar() {
       <div className="flex items-center gap-4">
         {!user ? (
           <>
+            {/* If NOT signed in, show Sign In / Up */}
             <Button className="flex items-center gap-2" onClick={() => nav("/auth")}>
               <LogIn size={18} /> Sign In
             </Button>
@@ -30,15 +28,13 @@ export function LandingNavbar() {
           </>
         ) : (
           <>
+            {/* If signed in, show Dashboard button */}
             <span className="flex items-center gap-2 text-primary font-medium">
               <User size={18} />
               {user.email}
             </span>
-            <Button className="flex items-center gap-2" onClick={() => nav("/dashboard")}>
+            <Button className="flex items-center gap-2" onClick={handleDashboard}>
               Dashboard
-            </Button>
-            <Button variant="outline" className="flex items-center gap-2" onClick={handleSignOut}>
-              <LogOut size={18} /> Sign Out
             </Button>
           </>
         )}

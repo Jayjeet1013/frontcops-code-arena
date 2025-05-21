@@ -2,6 +2,7 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { useAuth } from "@/auth/SupabaseProvider";
 import { Link } from "react-router-dom";
+import { DashboardNavbar } from "@/components/DashboardNavbar";
 
 const quickLinks = [
   { to: "/theory", label: "Theory", desc: "Key concepts for interviews" },
@@ -15,16 +16,31 @@ export default function Dashboard() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-bg p-4 pt-12 max-w-2xl mx-auto font-inter">
-        <h2 className="text-2xl font-bold mb-2">👋 Welcome, {user?.email?.split("@")[0] || "Frontend Developer"}!</h2>
-        <p className="mb-6 text-gray-600">Let’s level up your frontend skills and prep for interviews – one topic at a time.</p>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {quickLinks.map(link => (
-            <Link to={link.to} key={link.label} className="bg-white shadow-soft rounded-2xl p-6 flex flex-col gap-1 border hover:scale-105 transition-transform duration-150">
-              <span className="text-lg font-semibold text-primary">{link.label}</span>
-              <span className="text-gray-400 text-sm">{link.desc}</span>
-            </Link>
-          ))}
+      <div className="min-h-screen bg-bg font-inter flex flex-col">
+        <DashboardNavbar />
+        <div className="flex-1 p-4 pt-8 max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold mb-2">
+            👋 Welcome, {user?.email?.split("@")[0] || "Frontend Developer"}!
+          </h2>
+          <p className="mb-6 text-gray-600">
+            Let’s level up your frontend skills and prep for interviews – one topic at a time.
+          </p>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {quickLinks.map(link => (
+              <Link
+                to={link.to}
+                key={link.label}
+                className="bg-white shadow-soft rounded-2xl p-6 flex flex-col gap-1 border hover:scale-105 transition-transform duration-150"
+              >
+                <span className="text-lg font-semibold text-primary">
+                  {link.label}
+                </span>
+                <span className="text-gray-400 text-sm">
+                  {link.desc}
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </ProtectedRoute>
