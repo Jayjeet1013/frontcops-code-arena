@@ -19,22 +19,25 @@ export default function Theory() {
     setLoadingIdx(idx);
     const qObj = theoryQ[idx];
     try {
-      const resp = await fetch("/functions/v1/ai-gemini", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          task: "theory",
-          question: `Summarize for revision:\nQ: ${qObj.q}\nA: ${qObj.a}`
-        })
-      });
+      const resp = await fetch(
+        "https://lhtblxdxqscuiggesnkp.supabase.co/functions/v1/ai-gemini",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            task: "theory",
+            question: `Summarize for revision:\nQ: ${qObj.q}\nA: ${qObj.a}`,
+          }),
+        }
+      );
       const data = await resp.json();
-      setAiSummaries(summaries => {
+      setAiSummaries((summaries) => {
         const updated = [...summaries];
         updated[idx] = data.result || "No summary generated.";
         return updated;
       });
     } catch (e) {
-      setAiSummaries(summaries => {
+      setAiSummaries((summaries) => {
         const updated = [...summaries];
         updated[idx] = "Error generating summary.";
         return updated;
