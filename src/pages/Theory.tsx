@@ -1,5 +1,7 @@
 
+import { useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { Button } from "@/components/ui/button";
 
 const theoryQ = [
   { topic: "HTML", q: "What are semantic elements in HTML? Name a few.", a: "Semantic elements clearly describe their meaning (e.g., <header>, <main>, <footer>, <article>). They help with SEO, accessibility, and code clarity." },
@@ -10,6 +12,38 @@ const theoryQ = [
 ];
 
 export default function Theory() {
+  const [aiSummaries, setAiSummaries] = useState<(string | null)[]>(Array(theoryQ.length).fill(null));
+  const [loadingIdx, setLoadingIdx] = useState<number | null>(null);
+
+  const handleAISummary = async (idx: number) => {
+    setLoadingIdx(idx);
+    const qObj = theoryQ[idx];
+    try {
+      const resp = await fetch("/functions/v1/ai-gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          task: "theory",
+          question: `Summarize for revision:\nQ: ${qObj.q}\nA: ${qObj.a}`
+        })
+      });
+      const data = await resp.json();
+      setAiSummaries(summaries => {
+        const updated = [...summaries];
+        updated[idx] = data.result || "No summary generated.";
+        return updated;
+      });
+    } catch (e) {
+      setAiSummaries(summaries => {
+        const updated = [...summaries];
+        updated[idx] = "Error generating summary.";
+        return updated;
+      });
+    } finally {
+      setLoadingIdx(null);
+    }
+  };
+
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-bg p-6 pb-24 max-w-2xl mx-auto font-inter">
@@ -19,6 +53,22 @@ export default function Theory() {
             <div key={i} className="bg-white rounded-2xl p-5 shadow-soft">
               <h4 className="font-semibold text-lg mb-1">{t.topic}: <span className="text-gray-700">{t.q}</span></h4>
               <p className="text-accent mt-2">{t.a}</p>
+              <div className="mt-4">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleAISummary(i)}
+                  disabled={loadingIdx === i}
+                >
+                  {loadingIdx === i ? "Summarizing..." : "Summarize with AI"}
+                </Button>
+                {aiSummaries[i] && (
+                  <div className="p-3 mt-3 rounded-lg bg-accent/50 text-sm text-gray-800 border">
+                    <span className="font-bold block mb-1">AI Summary:</span>
+                    {aiSummaries[i]}
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
